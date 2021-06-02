@@ -1,0 +1,70 @@
+<link href="https://releases.transloadit.com/uppy/v1.29.1/uppy.min.css" rel="stylesheet">
+<style>
+    img {
+        display: block;
+        width: auto;
+    }
+
+    .uppy-Dashboard {
+        display: flex;
+        justify-content: center;
+    }
+
+    a.uppy-Dashboard-poweredBy {
+        display: none;
+    }
+</style>
+
+<script src="https://releases.transloadit.com/uppy/v1.29.1/uppy.min.js"></script>
+<script>
+    var uppy = Uppy.Core({
+        autoProceed: false,
+        restrictions: {
+            maxFileSize: 1000000,
+            maxNumberOfFiles: 18,
+            minNumberOfFiles: 1,
+            allowedFileTypes: ['image/*']
+        }
+    }).use(Uppy.Dashboard, {
+        inline: true,
+        target: '#drag-drop-area'
+    }).use(Uppy.XHRUpload, {
+        endpoint: '/upload',
+        // headers: {
+        //     // 'X-CSRF-TOKEN': $token, // pass the CSRF_TOKEN()
+        //     'X-Requested-With': 'XMLHttpRequest', // multipart/form-data
+        // },
+        limit: 6,
+        formData: true,
+        bundle: true,
+        fieldName: `images[]`,
+    })
+
+    uppy.on('complete', (result) => {
+        console.log('Upload complete! We’ve uploaded these files:', result.successful)
+        window.location.reload()
+    })
+</script>
+
+<%- contentFor('content') %>
+<div class="p-3">
+    <div class="row mt-4">
+        <h1>Item Gallery</h1>
+    </div>
+    <div class="row mt-4 justify-content-center">
+        <div class="row mb-4">
+            <% images.forEach((image, index)=>{ %>
+                <div class="col-3">
+                    <form action="/upload/delete" method="post" id="delete-form">
+                        <input type="hidden" name="tobedeleted" value="<%= id + '/' + image %>">
+                        <input type="hidden" name="toberedirected" value="/panel/items/<%= id %>/gallery">
+                        <button type="submit" class="btn btn-danger btn-close"></button>
+                    </form>
+                    <img src="/uploads/<%= id %>/<%= image %>" alt="image-<%= index %>" height="96">
+                </div>
+            <% }); %>
+        </div>
+        <hr>
+        <div id="drag-drop-area" class="mt-4"></div>
+    </div>
+</div>

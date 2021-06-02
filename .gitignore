@@ -1,0 +1,15 @@
+# vendor files
+node_modules/
+
+# idea files
+.idea/
+
+# lock files
+yarn.lock
+package-lock.json
+
+# env file
+.env
+
+# uploads folder
+storage/uploads/
