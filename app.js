@@ -60,6 +60,7 @@ app.use(function (req, res, next) {
 app.use('/', require('./routes/index.js'));
 app.use('/panel', require('./routes/panel.js'));
 app.use('/users', require('./routes/users.js'));
+app.use('/api', require('./routes/api.js'));
 
 app.post('/upload', (req, res) => {
     require('./config/multer').upload(req, res, (err) => {
